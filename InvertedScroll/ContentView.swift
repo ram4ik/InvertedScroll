@@ -8,17 +8,34 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var data = (1...42).map { $0 }
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            List(data, id: \.self) { i in
+                Text("\(i)")
+                    .flipped()
+            }
+            .listStyle(.plain)
+            .flipped()
         }
-        .padding()
     }
 }
 
 #Preview {
     ContentView()
+}
+
+struct Flipped: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .rotationEffect(.radians(Double.pi))
+            .scaleEffect(x: -1, y: 1, anchor: .center)
+    }
+}
+
+extension View {
+    func flipped() -> some View {
+        modifier(Flipped())
+    }
 }
